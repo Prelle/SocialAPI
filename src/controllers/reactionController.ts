@@ -18,6 +18,7 @@ export const addReaction = async (req: Request, res: Response) => {
             res.json(thought);
         }
     } catch (err) {
+        console.error(`Error in addReaction: ${err}`);
         res.status(500).json(err);
     }
 }
@@ -39,6 +40,7 @@ export const deleteReaction = async (req: Request, res: Response) => {
             res.json(thought);
         }
     } catch (err) {
+        console.error(`Error in deleteReaction: ${err}`);
         res.status(500).json(err);
     }
 }

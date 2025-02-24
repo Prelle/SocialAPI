@@ -7,6 +7,7 @@ export const getAllThoughts = async (_req: Request, res: Response) => {
         const thoughts = await Thought.find();
         res.json(thoughts);
     } catch (err) {
+        console.error(`Error in getAllThoughts: ${err}`);
         res.status(500).json(err);
     }
 }
@@ -23,13 +24,14 @@ export const getSingleThought = async (req: Request, res: Response) => {
             res.status(404).json({ message: 'No thought found with that ID' });
         }
     } catch (err) {
+        console.error(`Error in getSingleThought: ${err}`);
         res.status(500).json(err);
     }
 }
 
 // Create a thought and assign it to a user
 export const createThought = async (req: Request, res: Response) => {
-    const { userId } = req.body.userId;
+    const userId = req.body.userId;
 
     try {
         if (await User.countDocuments({ _id: userId }) === 0) {
@@ -45,6 +47,7 @@ export const createThought = async (req: Request, res: Response) => {
             res.json(thought);
         }
     } catch (err) {
+        console.error(`Error in createThought: ${err}`);
         res.status(500).json(err);
     }
 }
@@ -66,6 +69,7 @@ export const updateThought = async (req: Request, res: Response) => {
             res.json(thought);
         }
     } catch (err) {
+        console.error(`Error in updateThought: ${err}`);
         res.status(500).json(err);
     }
 }
@@ -77,14 +81,20 @@ export const deleteThought = async (req: Request, res: Response) => {
     try {
         const result = await Thought.findOneAndDelete({ _id: thoughtId });
 
-        // TODO: Test if we need to remove the thought from the user
-
         if (!result) {
             res.status(404).json({ message: 'No thought found with that ID' });
         } else {
+            // Remove the entry from the user's thoughts array
+            await User.findOneAndUpdate(
+                { thoughts: thoughtId },
+                { $pull: { thoughts: thoughtId } },
+                { new: true }
+            );
+
             res.status(200).json(result);
         }
     } catch (err) {
+        console.error(`Error in deleteThought: ${err}`);
         res.status(500).json(err);
     }
 }

@@ -24,6 +24,7 @@ export const addFriend = async (req: Request, res: Response) => {
             }
         }
     } catch (err) {
+        console.error(`Error in addFriend: ${err}`);
         res.status(500).json(err);
     }
 }
@@ -35,7 +36,7 @@ export const removeFriend = async (req: Request, res: Response) => {
     try {
         const user = await User.findOneAndUpdate(
             { _id: userId },
-            { $removeFromSet: { friends: friendId } },
+            { $pull: { friends: friendId } },
             { new: true }
         );
 
@@ -45,6 +46,7 @@ export const removeFriend = async (req: Request, res: Response) => {
             res.json(user);
         }
     } catch (err) {
+        console.error(`Error in removeFriend: ${err}`);
         res.status(500).json(err);
     }
 }

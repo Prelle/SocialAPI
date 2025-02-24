@@ -73,3 +73,6 @@ yarn.lock
 
 # Local Netlify folder
 .netlify
+
+# Build output folder
+dist

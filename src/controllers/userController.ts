@@ -7,6 +7,7 @@ export const getAllUsers = async (_req: Request, res: Response) => {
         const users = await User.find();
         res.json(users);
     } catch (err) {
+        console.error(`Error in getAllUsers: ${err}`);
         res.status(500).json(err);
     }
 }
@@ -25,6 +26,7 @@ export const getSingleUser = async (req: Request, res: Response) => {
             res.status(404).json({ message: 'No user found with that ID' });
         }
     } catch (err) {
+        console.error(`Error in getSingleUser: ${err}`);
         res.status(500).json(err);
     }
 }
@@ -35,6 +37,7 @@ export const createUser = async (req: Request, res: Response) => {
         const user = await User.create(req.body);
         res.json(user);
     } catch (err) {
+        console.error(`Error in createUser: ${err}`);
         res.status(500).json(err);
     }
 }
@@ -56,6 +59,7 @@ export const updateUser = async (req: Request, res: Response) => {
             res.json(user);
         }
     } catch (err) {
+        console.error(`Error in updateUser: ${err}`);
         res.status(500).json(err);
     }
 }
@@ -73,6 +77,7 @@ export const deleteUser = async (req: Request, res: Response) => {
             res.status(200).json(result);
         }
     } catch (err) {
+        console.error(`Error in deleteUser: ${err}`);
         res.status(500).json(err);
     }
 }
